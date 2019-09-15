@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        .blue {
+            background: blue;
+            height: 100px;
+        }
+
+        .red {
+            background: red;
+            height: 100px;
+        }
+
+        .green {
+            background: green;
+            height: 150px;
+        }
+    </style>
+</head>
+<div id="app">
+    <!-- 这种情况默认从内到外触发 -->
+    <div class="blue" @click="divHandler">
+        <button @click="btnHandler">点我</button>
+    </div>
+
+    <!-- 使用.stop阻止冒泡 -->
+    <div class="red" @click="divHandler">
+        <button @click.stop="btnHandler">点我</button>
+    </div>
+
+    <div>
+        <a href="https://www.baidu.com" @click="linkHandler">点我</a>
+    </div>
+    <!-- 使用.prevent阻止默认行为事件 -->
+    <div>
+        <a href="https://www.baidu.com" @click.prevent="linkHandler">点我不跳</a>
+    </div>
+
+    <!-- 使用.capture实现捕获触发事件的机制(从外到内触发) -->
+    <div class="blue" @click.capture="divHandler">
+        <button @click="btnHandler">点我</button>
+    </div>
+
+    <!-- 使用.self实现只有点击当前元素才会触发事件处理函数 -->
+    <div class="red" @click="divHandler">
+        <button @click.self="btnHandler">点我</button>
+    </div>
+
+    <!-- 使用.once只触发一次事件处理函数 -->
+    <div>
+        <a href="https://www.baidu.com" @click.prevent.once="linkHandler">点我不跳</a>
+    </div>
+
+    <!-- .stop和.self的区别 -->
+    <!-- .self只会阻止自己冒泡的触发,不会阻止别人冒泡触发 -->
+    <div class="green" @click="divHandler2">
+        <div class="red" @click="divHandler">
+            <button @click.stop="btnHandler">点我</button>
+        </div>
+    </div>
+    <div class="green" @click="divHandler2">
+        <div class="red" @click.self="divHandler">
+            <button @click="btnHandler">点我</button>
+        </div>
+    </div>
+
+</div>
+
+<body>
+
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+
+        },
+        methods: {
+            divHandler: function () {
+                console.log("触发div点击事件!");
+            },
+            divHandler2: function () {
+                console.log("触发div2点击事件!");
+            },
+            btnHandler: function () {
+                console.log("触发btn点击事件!");
+            },
+            linkHandler: function () {
+                alert("触发链接点击事件!");
+            }
+        }
+    });
+</script>
+
+</html>

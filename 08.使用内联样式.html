@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 有横线的要加引号 -->
+        <h1 :style="{color:'red','font-weight':200}">内联样式</h1>
+        <!-- 会报错 -->
+        <!-- <h1 :style="{color:'red',font-weight:200}">内联样式</h1> -->
+        <!-- 使用多个对象可以使用数组 -->
+        <h1 :style="[obj1,obj2]">内联样式</h1>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            obj1: {
+                color: 'red'
+            },
+            obj2: {
+                'font-weight': 200,
+                'font-style': 'italic'
+            },
+        },
+        methods: {
+
+        }
+    });
+</script>
+
+</html>

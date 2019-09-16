@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 迭代数组 -->
+        <div>
+            <p>迭代数组</p>
+            <!-- 简单数组 -->
+            <p v-for="(item,i) in list">{{item}} - {{i}}</p>
+            <!-- 复杂数组 -->
+            <p v-for="(user,i) in list2">{{user.name}} - {{user.age}} - {{i}}</p>
+            <hr />
+        </div>
+        <!-- 迭代对象 -->
+        <div>
+            <p>迭代对象</p>
+            <p v-for="(val,key) in user">值:{{val}} - 键:{{key}}</p>
+            <p v-for="(val,key,i) in user">值:{{val}} - 键:{{key}} - 索引:{{i}}</p>
+            <hr />
+        </div>
+        <!-- 迭代数字 -->
+        <div>
+            <p>迭代数字</p>
+            <p v-for="count in 5">{{count}}</p>
+            <hr />
+        </div>
+
+        <!-- v-for中key的使用注意事项 -->
+        <!-- 2.2+版本里在组件中使用v-for key是必须的，这是为了给Vue一个提示，以便他能跟踪每个节点的身份，从而重用和重新排序现有元素 -->
+        <div>
+            <!-- 这里没有使用key添加会出现问题 -->
+            <!-- <div>
+                Id:<input type="number" v-model="id">
+                name:<input type="text" v-model="name">
+                age:<input type="number" v-model="age">
+                <button @click="add">Add</button>
+            </div>
+            <div>
+                <p v-for="item in list3"><input type="checkbox" name="mao">{{item.id}} --- {{item.name}} ---
+                    {{item.age}}</p>
+            </div> -->
+        </div>
+        <!-- 使用key -->
+        <!-- key只能是数字和String 且必须是唯一的值 -->
+        <div>
+                <!-- 这里有使用key不会出现问题 -->
+                <div>
+                    Id:<input type="number" v-model="id">
+                    name:<input type="text" v-model="name">
+                    age:<input type="number" v-model="age">
+                    <button @click="add">Add</button>
+                </div>
+                <div>
+                    <p v-for="item in list3" :key="item.id"><input type="checkbox" name="mao">{{item.id}} --- {{item.name}} ---
+                        {{item.age}}</p>
+                </div>
+            </div>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            id: "",
+            name: "",
+            age: "",
+            list: [2, 4, 6, 8, 10],
+            list2: [
+                { name: "大毛", age: 15 },
+                { name: "二毛", age: 10 },
+                { name: "三毛", age: 5 },
+            ],
+            list3: [
+                { id: 2, name: "大毛", age: 15 },
+                { id: 4, name: "二毛", age: 10 },
+                { id: 6, name: "三毛", age: 5 },
+            ],
+            user: { name: "四毛", age: 15 }
+        },
+        methods: {
+            add() {
+                this.list3.unshift({ id: this.id, name: this.name, age: this.age });
+            }
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            ID：<input type="text" v-model="car.id">
+            <!-- 这里给修饰符一个固定的enter键按下去触发 -->
+            <!-- 名称：<input type="text" v-model="car.name" @keyup.enter="add()"> -->
+
+            <!-- 目前系统提供了：.enter .tab .delete .esc .space .up .down .left .right 除此之外需要自己定义 -->
+
+            <!-- 可以直接使用键盘码值来操作 -->
+            <!-- 名称：<input type="text" v-model="car.name" @keyup.113="add()"> -->
+            
+            <!-- 自定义全局按键修饰符 Vue.config.keyCodes.f2 = 113; -->
+            名称：<input type="text" v-model="car.name" @keyup.f2="add()">
+
+            <button @click="add()">添加</button>
+            <input type="text" v-model="keyword">
+        </div>
+        <div>
+            <table class="table table-bordered table-hover table-scriped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in search()" :key="item.id">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.createTime}}</td>
+                        <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+<script>
+    Vue.config.keyCodes.f2 = 113;
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            keyword: '',
+            car: {
+                id: '',
+                name: '',
+            },
+            list: [
+                { id: 1, name: '长安', createTime: new Date() },
+                { id: 2, name: '五菱', createTime: new Date() }
+            ]
+        },
+        methods: {
+            add() {
+                var car = {
+                    id: this.car.id,
+                    name: this.car.name,
+                    createTime: new Date(),
+                }
+                this.list.push(car);
+                this.car.id = this.car.name = '';
+            },
+            search() {
+                // let list = new Array();
+                // this.list.forEach(item => {
+                //     if(item.name.indexOf(this.keyword) != -1){
+                //         list.push(item);
+                //     }
+                // });
+                // return list;
+
+                return this.list.filter(item => {
+                    if (item.name.includes(this.keyword)) {
+                        return item;
+                    }
+                });
+            },
+            del(id) {
+                // this.list.some((item,i)=>{
+                //     if(item.id == id){
+                //         this.list.splice(i,1);
+                //         return true;
+                //     }
+                // });
+
+                let index = this.list.findIndex((item) => {
+                    if (item.id == id) {
+                        return true;
+                    }
+                });
+                this.list.splice(index, 1);
+            }
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="filterDemo">
+        <p v-fontweight="900" v-fontstyle="'italic'">{{ msg | msgFilter('哈哈') }}</p>
+    </div>
+
+    <div id="app">
+        <div>
+            ID：<input type="text" v-model="car.id">
+            名称：<input type="text" v-model="car.name" @keyup.enter="add()">
+            <button @click="add()">添加</button>
+
+            <!-- 自定义获取焦点指令：v-focus -->
+            <input type="text" v-model="keyword" v-focus v-color="'blue'">
+        </div>
+        <div>
+            <table class="table table-bordered table-hover table-scriped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in search()" :key="item.id">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.createTime}}</td>
+                        <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+<script>
+    // 使用Vue.directive()定义
+    // 参数一：为指令名称，注意在定义指令名称时不需要加v-前缀，但是调用时必须加上前缀。
+    // 参数二：是一个对象，这个对象身上有一些指令相关函数，这些函数可以在特定的阶段执行相关的操作。
+    Vue.directive('focus', {
+        bind: function (el) {
+            // 只调用一次，指令第一次绑定到元素时调用。在这里可以进行一次性的初始化设置。
+            // 在元素刚绑定指令时还没有插入到DOM中去此时调用focus方法没有作用，因为一个元素只有插入DOM中去了才可以获取焦点。
+        },
+        inserted: function (el) {
+            // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
+            el.focus()
+        },
+        update: function (el) {
+            // 所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前。指令的值可能发生了改变，也可能没有。但是你可以通过比较更新前后的值来忽略不必要的模板更新。
+        }
+    });
+
+    // 自定义一个设置字体颜色的指令
+    Vue.directive('color', {
+        bind: function (el, binding) {
+            el.style.color = binding.value;
+        }
+    });
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            keyword: '',
+            car: {
+                id: '',
+                name: '',
+            },
+            list: [
+                { id: 1, name: '长安', createTime: new Date() },
+                { id: 2, name: '五菱', createTime: new Date() }
+            ]
+        },
+        methods: {
+            add() {
+                var car = {
+                    id: this.car.id,
+                    name: this.car.name,
+                    createTime: new Date(),
+                }
+                this.list.push(car);
+                this.car.id = this.car.name = '';
+            },
+            search() {
+                // let list = new Array();
+                // this.list.forEach(item => {
+                //     if(item.name.indexOf(this.keyword) != -1){
+                //         list.push(item);
+                //     }
+                // });
+                // return list;
+
+                return this.list.filter(item => {
+                    if (item.name.includes(this.keyword)) {
+                        return item;
+                    }
+                });
+            },
+            del(id) {
+                // this.list.some((item,i)=>{
+                //     if(item.id == id){
+                //         this.list.splice(i,1);
+                //         return true;
+                //     }
+                // });
+
+                let index = this.list.findIndex((item) => {
+                    if (item.id == id) {
+                        return true;
+                    }
+                });
+                this.list.splice(index, 1);
+            }
+        }
+    });
+
+
+    Vue.filter('msgFilter', function (msg, replaceStr) {
+        return msg.replace(/Vue.js/g, replaceStr);
+    });
+
+    var filterDemo = new Vue({
+        el: "#filterDemo",
+        data: {
+            msg: "Vue.js 自身不是一个全能框架——它只聚焦于视图层。因此它非常容易学习，非常容易与其它库或已有项目整合。另一方面，在与相关工具和支持库一起使用时，Vue.js 也能完美地驱动复杂的单页应用。"
+        },
+        directives: {
+            // 私有指令
+            fontweight: {
+                bind: function (el, binding) {
+                    el.style.fontWeight = binding.value;
+                }
+            },
+            // 函数简写
+            // 在很多时候，你可能想在 bind 和 update 时触发相同行为，而不关心其它的钩子
+            fontstyle: function (el, binding) {
+                el.style.fontStyle = binding.value;
+            }
+
+        }
+
+    });
+</script>
+
+</html>

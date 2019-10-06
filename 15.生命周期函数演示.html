@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <h1 id="title">{{msg}}</h1>
+        <input id="value" type="text" v-model='value'>
+    </div>
+
+    <div align="center">
+        <img src="./img/lifecycle.png">
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: '生命周期函数演示',
+            value: ''
+        },
+        methods: {
+            show() {
+                console.log('执行了show方法');
+            }
+
+        },
+        beforeCreate: function () {
+            // 这是我们遇到的第一个生命周期函数，表示实例被创建出来之前会执行它。
+            console.log('beforeCreate-----start');
+
+            // console.log(this.msg);//获取不到msg
+            // this.show();//会报错
+
+            console.log('beforeCreate-----end');
+        },
+        created: function () {
+            // 这是我们遇到的第二个生命周期函数。
+            console.log('created-----start');
+
+            console.log(this.msg);
+            this.show();
+
+            console.log('created-----end');
+        },
+        beforeMount: function () {
+            // 这是我们遇到的第三个生命周期函数，表示模板在内存已经编辑完成，尚未渲染到页面中，页面还是旧的。
+            console.log('beforeMount-----start');
+
+            console.log(document.getElementById("title").innerText);// 输出的是{{ msg }}页面中的元素还没有被替换出来
+
+            console.log('beforeMount-----end');
+        },
+        mounted: function () {
+            // 这是我们遇到的第四个生命周期函数，将内存中编辑好的模板挂载到页面中去。
+            console.log('mounted-----start');
+
+            console.log(document.getElementById("title").innerText);// 输出的是{{ msg }}页面中的元素还没有被替换出来
+
+            console.log('mounted-----end');
+        },
+        beforeUpdate: function () {
+            // 这是我们遇到的第五个生命周期函数，data数据改变时触发，数据被更新了，但是界面没有更新。
+            console.log('beforeUpdate-----start');
+            console.log(document.getElementById("value").value);
+            console.log(this.value);
+            console.log('beforeUpdate-----end');
+        },
+        updated: function () {
+            // 这是我们遇到的第六个生命周期函数，此时界面已经更新。
+            console.log('updated-----start');
+            console.log(document.getElementById("value").value);
+            console.log(this.value);
+            console.log('updated-----end');
+        },
+        beforeDestroy: function () {
+            // 这是我们遇到的第七个生命周期函数，Vue实例销毁前触发，此时实例还处于可用状态。
+            console.log('beforeDestroy-----start');
+
+            console.log('beforeDestroy-----end');
+        },
+        destroyed: function () {
+            // 这是我们遇到的第八个生命周期函数，Vue实例销毁后触发，此时实例不存在了。
+            console.log('destroyed-----start');
+
+            console.log('destroyed-----end');
+        }
+
+    });
+
+</script>
+
+</html>

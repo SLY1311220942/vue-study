@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="filterDemo">
+        <p>{{ msg | msgFilter('哈哈') }}</p>
+    </div>
+
+    <div id="app">
+        <div>
+            ID：<input type="text" v-model="car.id">
+            名称：<input type="text" v-model="car.name">
+            <button @click="add()">添加</button>
+            <input type="text" v-model="keyword">
+        </div>
+        <div>
+            <table class="table table-bordered table-hover table-scriped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in search()" :key="item.id">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <!-- 过滤器只能使用在:mustache和v-bind -->
+                        <td>{{item.createTime | dateFormatFilter}}</td>
+                        <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+<script>
+    // filter要写在前面
+    // 过滤器调用时的格式 {{ name | 过滤器的名称 }}
+    // 过滤器定义方式 Vue.filter('过滤器名称',function(){})
+    // 第一个参数已被规定死了永远都是过滤器管道符前面传递过来的数据
+    Vue.filter('dateFormatFilter', function (data) {
+
+        var dt = new Date(data);
+        var y = dt.getFullYear();
+        var m = dt.getMonth() + 1;
+        if (m < 10) {
+            m = `0${m}`;
+        }
+        var d = dt.getDay() - 1;
+        if (d < 10) {
+            d = `0${d}`;
+        }
+
+        var hh = dt.getHours();
+        if (hh < 10) {
+            hh = `0${hh}`;
+        }
+        var mm = dt.getMinutes();
+        if (mm < 10) {
+            mm = `0${mm}`;
+        }
+        var ss = dt.getSeconds();
+        if (ss < 10) {
+            ss = `0${ss}`;
+        }
+        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+    });
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            keyword: '',
+            car: {
+                id: '',
+                name: '',
+            },
+            list: [
+                { id: 1, name: '长安', createTime: new Date() },
+                { id: 2, name: '五菱', createTime: new Date() }
+            ]
+        },
+        methods: {
+            add() {
+                var car = {
+                    id: this.car.id,
+                    name: this.car.name,
+                    createTime: new Date(),
+                }
+                this.list.push(car);
+                this.car.id = this.car.name = '';
+            },
+            search() {
+                // let list = new Array();
+                // this.list.forEach(item => {
+                //     if(item.name.indexOf(this.keyword) != -1){
+                //         list.push(item);
+                //     }
+                // });
+                // return list;
+
+                return this.list.filter(item => {
+                    if (item.name.includes(this.keyword)) {
+                        return item;
+                    }
+                });
+            },
+            del(id) {
+                // this.list.some((item,i)=>{
+                //     if(item.id == id){
+                //         this.list.splice(i,1);
+                //         return true;
+                //     }
+                // });
+
+                let index = this.list.findIndex((item) => {
+                    if (item.id == id) {
+                        return true;
+                    }
+                });
+                this.list.splice(index, 1);
+            }
+        },
+        // 定义私有过滤器 如果全局过滤器和私有名称一致,将优先调用私有过滤器
+        filters: {
+            dateFormatFilter: function (data) {
+                var dt = new Date(data);
+                var y = dt.getFullYear();
+                var m = (dt.getMonth() + 1).toString().padStart(2, '0');
+                var d = (dt.getDay() - 1).toString().padStart(2, '0');
+                var hh = dt.getHours().toString().padStart(2, '0');
+                var mm = dt.getMinutes().toString().padStart(2, '0');
+                var ss = dt.getSeconds().toString().padStart(2, '0');
+                return `${y}-${m}-${d} ${hh}:${mm}:${ss} private`;
+            }
+        }
+    });
+
+
+
+
+    Vue.filter('msgFilter', function (msg, replaceStr) {
+        return msg.replace(/Vue.js/g, replaceStr);
+    });
+
+    var filterDemo = new Vue({
+        el: "#filterDemo",
+        data: {
+            msg: "Vue.js 自身不是一个全能框架——它只聚焦于视图层。因此它非常容易学习，非常容易与其它库或已有项目整合。另一方面，在与相关工具和支持库一起使用时，Vue.js 也能完美地驱动复杂的单页应用。"
+        }
+
+    });
+
+
+</script>
+
+</html>

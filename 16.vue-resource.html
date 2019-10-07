@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <!-- 注意Vue-resource依赖于vue -->
+    <script src="./lib/vue-resource.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="get请求" @click="requestGet()">
+        <input type="button" value="post请求" @click="requestPost()">
+        <input type="button" value="jsonp请求" @click="requestJsonp()">
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            // 这里会有跨域的问题，因为我没有搭服务器
+            getUrl: 'https://www.baidu.com',
+            postUrl: 'https://www.baidu.com',
+            jsonpUrl: 'https://www.baidu.com'
+        },
+        methods: {
+            requestGet() {
+                this.$http.get(this.getUrl, {
+                    emulateJSON: true
+                }).then(response => {
+                    console.log(response);
+                }, response => {
+                    // error callback
+                });
+            },
+            requestPost() {
+                this.$http.post(this.postUrl, {
+                    emulateJSON: true
+                }).then(response => {
+                    console.log(response);
+                }, response => {
+                    // error callback
+                });
+            },
+            requestJsonp() {
+                this.$http.jsonp(this.jsonpUrl, {
+
+                }).then(response => {
+                    console.log(response);
+                }, response => {
+                    // error callback
+                });
+            }
+        }
+    });
+</script>
+
+</html>

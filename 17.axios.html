@@ -17,12 +17,15 @@
     </div>
 </body>
 <script>
+    // 配置全局根路径
+    axios.defaults.baseURL = 'http://localhost:8080';
+
     var vm = new Vue({
         el: "#app",
         data: {
-            // 这里会有跨域的问题，因为我没有搭服务器
-            getUrl: 'http://localhost:8080/demo/requestGet',
-            postUrl: 'http://localhost:8080/demo/requestPost'
+            // 这里会有跨域的问题，因为我没有搭服务器。现在我搭了。axios配置全局根路径后不需要像vue-resource一样写相对路径。
+            getUrl: '/demo/requestGet',
+            postUrl: '/demo/requestPost'
         },
         methods: {
             requestGet() {

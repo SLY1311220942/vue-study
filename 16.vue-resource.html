@@ -19,13 +19,21 @@
     </div>
 </body>
 <script>
+    // 配置全局根路径
+    Vue.http.options.root = 'http://localhost:8080';
+    // 全局配置emulateJSON为true
+    Vue.http.options.emulateJSON = true;
+
     var vm = new Vue({
         el: "#app",
         data: {
-            // 这里会有跨域的问题，因为我没有搭服务器
-            getUrl: 'http://localhost:8080/demo/requestGet',
-            postUrl: 'http://localhost:8080/demo/requestPost',
-            jsonpUrl: 'http://localhost:8080/demo/requestJsonp'
+            // 这里会有跨域的问题，因为我没有搭服务器 配置全局根路径是需要些相对路径
+            // getUrl: '/demo/requestGet',
+            // postUrl: '/demo/requestPost',
+            // jsonpUrl: '/demo/requestJsonp'
+            getUrl: 'demo/requestGet',
+            postUrl: 'demo/requestPost',
+            jsonpUrl: 'demo/requestJsonp'
         },
         methods: {
             requestGet() {

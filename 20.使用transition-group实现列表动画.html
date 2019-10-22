@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        li {
+            border: 1px dashed #999;
+            margin: 5px;
+            line-height: 35px;
+            padding-left: 5px;
+        }
+
+        li:hover {
+            background: greenyellow;
+            transition: all 0.4s ease;
+        }
+
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <label>
+                id:
+                <input type="text" v-model="id">
+            </label>
+            <label>
+                name:
+                <input type="text" v-model="name">
+            </label>
+
+            <button @click="add">添加</button>
+        </div>
+        <div>
+            <ul>
+                <!-- 在实现列表过渡时，如果需要过渡的元素是通过v-for循环渲染出来的，就不能使用transition标签包裹，需要使用transition-group -->
+                <transition-group>
+                    <li v-for="item in list" key="item.id">{{item.name}} --- {{item.name}}</li>
+                </transition-group>
+            </ul>
+        </div>
+
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            id: "",
+            name: "",
+            list: [
+                { id: 1, name: '大毛' },
+                { id: 2, name: '二毛' },
+                { id: 3, name: '三毛' },
+                { id: 4, name: '四毛' }
+            ]
+        },
+        methods: {
+            add() {
+                var user = {
+                    id: this.id,
+                    name: this.name
+                }
+                this.list.push(user);
+            }
+        }
+    });
+</script>
+
+</html>

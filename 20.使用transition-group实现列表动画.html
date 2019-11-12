@@ -13,6 +13,7 @@
             margin: 5px;
             line-height: 35px;
             padding-left: 5px;
+            width: 100%;
         }
 
         li:hover {
@@ -29,6 +30,14 @@
         .v-enter-active,
         .v-leave-active {
             transition: all 0.6s ease;
+        }
+
+        .v-move {
+            transition: all 0.6s ease;
+        }
+
+        .v-leave-active {
+            position: absolute;
         }
     </style>
 </head>
@@ -48,12 +57,14 @@
             <button @click="add">添加</button>
         </div>
         <div>
-            <ul>
+            <!-- <ul> -->
                 <!-- 在实现列表过渡时，如果需要过渡的元素是通过v-for循环渲染出来的，就不能使用transition标签包裹，需要使用transition-group -->
-                <transition-group>
-                    <li v-for="item in list" key="item.id">{{item.name}} --- {{item.name}}</li>
+                <!-- appear提供一个入场效果 -->
+                <!-- 通过为transition-group元素设置tag属性，指定transition-group渲染为指定的元素，如果不指定tag属性，默认渲染为span标签 -->
+                <transition-group appear tag="ul">
+                    <li v-for="(item,i) in list" :key="item.id" @click="del(i)">{{item.name}} --- {{item.name}}</li>
                 </transition-group>
-            </ul>
+            <!-- </ul> -->
         </div>
 
     </div>
@@ -78,6 +89,9 @@
                     name: this.name
                 }
                 this.list.push(user);
+            },
+            del(i) {
+                this.list.splice(i, 1);
             }
         }
     });

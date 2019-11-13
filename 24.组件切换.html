@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateX(80px);
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <a href="" @click.prevent="flag = true">登录</a>
+        <a href="" @click.prevent="flag = false">注册</a>
+        <login v-if="flag"></login>
+        <register v-else="flag"></register>
+
+        <hr>
+        <!-- Vue 提供了component，来展示对应名称的组件 -->
+        <!-- component是一个占位符，:is 属性，可以用来指定需要展示的组件的名称 -->
+        <a href="" @click.prevent="componentId = 'login'">登录</a>
+        <a href="" @click.prevent="componentId = 'register'">注册</a>
+        <component :is="componentId"></component>
+
+        <hr>
+        <a href="" @click.prevent="componentId2 = 'login'">登录</a>
+        <a href="" @click.prevent="componentId2 = 'register'">注册</a>
+        <!-- 先出再进 -->
+        <transition mode="out-in">
+            <component :is="componentId2"></component>
+        </transition>
+
+    </div>
+</body>
+<script>
+    Vue.component("login", {
+        template: '<h3>登录组件</h3>',
+    });
+
+    Vue.component("register", {
+        template: '<h3>注册组件</h3>',
+    });
+
+
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            flag: true,
+            componentId: 'login',
+            componentId2: 'login'
+        },
+        methods: {
+
+        }
+    })
+</script>
+
+</html>

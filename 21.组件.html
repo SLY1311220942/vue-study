@@ -39,7 +39,11 @@
     // 2.1 组件模板只能有一个根元素
     // Vue.component('comp2', Vue.extend({template: '<h3>这是使用Vue.component创建的组件</h3><span>123</span>'})); 会报错
     // Vue.component('comp2', Vue.extend({ template: '<h3>这是使用Vue.component创建的组件</h3>' }));
-    Vue.component('comp2', { template: '<h3>这是使用Vue.component创建的组件</h3>' });// 这样比上面简单一点
+    // Vue.component('comp2', { template: '<h3>这是使用Vue.component创建的组件</h3>' });// 这样比上面简单一点
+    var login = {
+        template: '<h3>这是使用Vue.component创建的组件</h3>'
+    }
+    Vue.component('comp2', login);// 可以通过定义对象来创建组件
     // 2.2
     var vm = new Vue({
         el: '#app2'
